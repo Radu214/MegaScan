@@ -9,6 +9,6 @@ public class CheckoutActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.checkout_activity);
-        // Implement actual checkout logic here
+        // Handle the checkout logic here
     }
 }

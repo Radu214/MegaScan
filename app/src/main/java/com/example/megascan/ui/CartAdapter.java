@@ -15,13 +15,13 @@ import java.util.List;
 
 public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
 
-    private List<CartItem> cartItems;
-    private OnCartItemChangeListener listener;
-
     public interface OnCartItemChangeListener {
         void onQuantityChanged();
         void onItemRemoved(CartItem item);
     }
+
+    private List<CartItem> cartItems;
+    private OnCartItemChangeListener listener;
 
     public CartAdapter(List<CartItem> cartItems, OnCartItemChangeListener listener) {
         this.cartItems = cartItems;
