@@ -12,6 +12,7 @@ import androidx.camera.lifecycle.ProcessCameraProvider;
 import androidx.camera.view.PreviewView;
 
 import android.Manifest;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -61,8 +62,10 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     }
 
     private void setupBottomNav() {
+        iconCart.setOnClickListener(v -> {
+            Intent intent = new Intent(ScanBarcodeActivity.this, CartActivity.class);
+            startActivity(intent);});
         iconProfile.setOnClickListener(v -> Toast.makeText(this, "Profile Page", Toast.LENGTH_SHORT).show());
-        iconCart.setOnClickListener(v -> Toast.makeText(this, "Cart Page", Toast.LENGTH_SHORT).show());
         iconScan.setOnClickListener(v -> Toast.makeText(this, "Already on Scan Page", Toast.LENGTH_SHORT).show());
         iconPromo.setOnClickListener(v -> Toast.makeText(this, "Promo Page", Toast.LENGTH_SHORT).show());
         iconAI.setOnClickListener(v -> Toast.makeText(this, "AI Assistant Page", Toast.LENGTH_SHORT).show());
