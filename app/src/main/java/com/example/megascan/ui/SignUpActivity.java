@@ -2,6 +2,7 @@ package com.example.megascan.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -43,5 +44,8 @@ public class SignUpActivity extends AppCompatActivity {
 
         // Perhaps finish the activity or redirect to LoginActivity:
         // finish();
+
+        Intent intent = new Intent(SignUpActivity.this, LoginActivity.class);
+        startActivity(intent);
     }
 }

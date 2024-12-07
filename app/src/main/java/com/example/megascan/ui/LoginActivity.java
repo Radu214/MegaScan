@@ -2,6 +2,7 @@ package com.example.megascan.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -52,6 +53,8 @@ public class LoginActivity extends AppCompatActivity {
         } else {
             Toast.makeText(this, R.string.error_invalid_credentials, Toast.LENGTH_SHORT).show();
         }
+        Intent intent = new Intent(LoginActivity.this, ScanBarcodeActivity.class);
+        startActivity(intent);
     }
 
     // For demonstration, simply checks if email contains "@" and password length > 3

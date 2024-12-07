@@ -15,4 +15,12 @@
     <string name="action_go_to_login">Go to Log In</string>
     <string name="sign_up_title">Sign Up</string>
     <string name="action_register">Register</string>
+
+
+    <!-- Strings for barcode scanner -->
+    <string name="profile_desc">Profile</string>
+    <string name="scan_desc">Scanner</string>
+    <string name="cart_desc">Cart</string>
+    <string name="promo_desc">Promo</string>
+    <string name="assistant_desc">Assistant</string>
 </resources>
