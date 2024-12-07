@@ -13,16 +13,21 @@
         android:theme="@style/Theme.MegaScan"
         tools:targetApi="31" >
 
-    <activity
-        android:name=".ui.WelcomeActivity"
+
+        <activity android:name=".ui.SignUpActivity"
+            android:exported="true"    />
+        <activity android:name=".ui.LoginActivity"
+            android:exported="true"/>
+        <activity android:name=".ui.WelcomeActivity"
+            android:exported="true" >
 
 
-        android:exported="true">
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
-    </activity>
+        </activity>
+
 
     </application>
 
