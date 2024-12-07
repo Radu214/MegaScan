@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.example.megascan.R;
+import com.example.megascan.model.Cart;
+import com.example.megascan.model.Produs;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.Barcode;
@@ -29,10 +31,25 @@ import com.google.mlkit.vision.barcode.BarcodeScanner;
 import com.google.mlkit.vision.barcode.BarcodeScanning;
 import com.google.mlkit.vision.common.InputImage;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import android.widget.Toast;
+import androidx.annotation.NonNull;
+import org.jetbrains.annotations.NotNull; // If using JetBrains annotations
+import java.io.IOException;
+import com.google.gson.Gson;
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 
 public class ScanBarcodeActivity extends AppCompatActivity {
     private static final int CAMERA_REQUEST_CODE = 1001;
@@ -165,15 +182,72 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     }
 
     private void showBarcodeDialog(String barcodeValue) {
-        new AlertDialog.Builder(this)
-                .setTitle("Barcode Found")
-                .setMessage("Value: " + barcodeValue)
-                .setPositiveButton("OK", (dialog, which) -> {
-                    dialog.dismiss();
-                    // Re-enable scanning after the dialog is dismissed
-                    isScanning = true;
-                })
-                .setCancelable(false)
-                .show();
+        OkHttpClient client = new OkHttpClient();
+
+        // Suppose you have a scannedBarcode string from your previous scanning logic
+        final String scannedBarcode = barcodeValue; // This should come from your scanning result
+
+        Request request = new Request.Builder()
+                .url("http://10.200.20.238:3000/data") // Replace with your server's IP and port
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+                e.printStackTrace();
+                String errorMessage = "F " + e.getMessage();
+                runOnUiThread(() -> {
+                    Toast.makeText(ScanBarcodeActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                });
+                runOnUiThread(() -> {
+                    new AlertDialog.Builder(ScanBarcodeActivity.this)
+                            .setTitle("Connection Error")
+                            .setMessage(errorMessage)
+                            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
+                            .setCancelable(false)
+                            .show();
+                });
+            }
+
+
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    // Handle server error
+                    runOnUiThread(() -> {
+                        Toast.makeText(ScanBarcodeActivity.this, "Server error: " + response.message(), Toast.LENGTH_SHORT).show();
+                    });
+                    return;
+                }
+
+                final String jsonData = response.body().string();
+
+                //Bring the cart
+                Cart cart = Cart.getInstance();
+
+                // Parse JSON
+                Produs[] produse = new Gson().fromJson(jsonData, Produs[].class);
+
+                // Find product by scannedBarcode
+                Produs matchedProduct = Arrays.stream(produse).filter(p -> p.getCod().equals(scannedBarcode)).findFirst().orElse(null);
+
+                if (matchedProduct != null) {
+                    // Add the matched product to the cart
+                    // addToCart(matchedProduct) should be a method you define to handle adding the product to the cart
+
+                    runOnUiThread(() -> {
+                        cart.addToCart(matchedProduct);
+                        Toast.makeText(ScanBarcodeActivity.this, "Product added to cart: " + matchedProduct.getDenumire(), Toast.LENGTH_SHORT).show();
+                    });
+                } else {
+                    // No matching product found
+                    runOnUiThread(() -> {
+                        Toast.makeText(ScanBarcodeActivity.this, "No product found for this barcode", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            }
+        });
     }
+
+
 }

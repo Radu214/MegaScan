@@ -9,22 +9,24 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.megascan.R;
+import com.example.megascan.model.Cart;
 import com.example.megascan.model.CartItem;
+import com.example.megascan.model.Produs;
 
 import java.util.List;
 
-public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder> {
+public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder>  {
 
     public interface OnCartItemChangeListener {
         void onQuantityChanged();
         void onItemRemoved(CartItem item);
     }
 
-    private List<CartItem> cartItems;
+    private Cart cart = Cart.getInstance();
     private OnCartItemChangeListener listener;
 
     public CartAdapter(List<CartItem> cartItems, OnCartItemChangeListener listener) {
-        this.cartItems = cartItems;
+        this.cart.setItemList(cartItems);
         this.listener = listener;
     }
 
@@ -37,9 +39,9 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull CartViewHolder holder, int position) {
-        CartItem item = cartItems.get(position);
-        holder.textProductName.setText(item.getProductName());
-        holder.textProductPrice.setText(String.format("$%.2f", item.getPrice()));
+        CartItem item = cart.getItemList().get(position);
+        holder.textProductName.setText(item.getDenumire());
+        holder.textProductPrice.setText(String.format("$%.2f", item.getPret()));
         holder.textQuantity.setText(String.valueOf(item.getQuantity()));
 
         holder.buttonIncrement.setOnClickListener(v -> {
@@ -57,7 +59,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
         });
 
         holder.buttonRemove.setOnClickListener(v -> {
-            cartItems.remove(position);
+            cart.getItemList().remove(position);
             notifyItemRemoved(position);
             if (listener != null) listener.onItemRemoved(item);
         });
@@ -65,7 +67,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
     @Override
     public int getItemCount() {
-        return cartItems.size();
+        return cart.getItemList().size();
     }
 
     static class CartViewHolder extends RecyclerView.ViewHolder {

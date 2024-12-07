@@ -11,21 +11,27 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.megascan.R;
+import com.example.megascan.model.Cart;
 import com.example.megascan.model.CartItem;
+import com.example.megascan.model.Produs;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Singleton;
+
 public class CartActivity extends AppCompatActivity implements CartAdapter.OnCartItemChangeListener {
+
 
     private RecyclerView recyclerView;
     private CartAdapter adapter;
     private TextView textTotalAmount;
     private Button buttonCheckout;
-    private List<CartItem> cartItems;
+    private Cart cart = Cart.getInstance();
 
     private TextView textEmptyCartMessage;
     private View checkoutContainer;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,12 +45,12 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         checkoutContainer = findViewById(R.id.checkout_container);
 
         // Example: Populate cart items
-        cartItems = new ArrayList<>();
-        cartItems.add(new CartItem("Product A", 9.99, 1));
-        cartItems.add(new CartItem("Product B", 4.50, 2));
-        cartItems.add(new CartItem("Product C", 12.00, 1));
+        Cart cart = Cart.getInstance();
+//        cartItems.add(new CartItem("Product A", 9.99, 1));
+//        cartItems.add(new CartItem("Product B", 4.50, 2));
+//        cartItems.add(new CartItem("Product C", 12.00, 1));
 
-        adapter = new CartAdapter(cartItems, this);
+        adapter = new CartAdapter(cart.getItemList(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
@@ -66,13 +72,14 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         updateTotal();
     }
 
+
     private void updateTotal() {
         double total = 0;
-        for (CartItem item : cartItems) {
-            total += item.getPrice() * item.getQuantity();
+        for (CartItem item : cart.getItemList()) {
+            total += item.getPret() * item.getQuantity();
         }
 
-        if (cartItems.isEmpty()) {
+        if (cart.getItemList().isEmpty()) {
             // Show empty state
             textEmptyCartMessage.setVisibility(View.VISIBLE);
             recyclerView.setVisibility(View.GONE);
