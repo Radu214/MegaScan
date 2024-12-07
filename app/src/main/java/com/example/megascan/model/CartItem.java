@@ -5,7 +5,7 @@ public class CartItem extends Produs{
     private int quantity;
 
     public CartItem(String productName, double price, String id, String brand, int quantity) {
-        super(productName, price, id, brand);
+        super(id, price, productName, brand);
         this.quantity = quantity;
     }
 

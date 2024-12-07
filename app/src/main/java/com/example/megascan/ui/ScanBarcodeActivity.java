@@ -24,6 +24,8 @@ import android.widget.Toast;
 import com.example.megascan.R;
 import com.example.megascan.model.Cart;
 import com.example.megascan.model.Produs;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.mlkit.vision.barcode.Barcode;
@@ -49,6 +51,10 @@ import okhttp3.Callback;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
+import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+
 
 
 public class ScanBarcodeActivity extends AppCompatActivity {
@@ -226,25 +232,64 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                 Cart cart = Cart.getInstance();
 
                 // Parse JSON
-                Produs[] produse = new Gson().fromJson(jsonData, Produs[].class);
+                ObjectMapper objectMapper = new ObjectMapper();
 
-                // Find product by scannedBarcode
-                Produs matchedProduct = Arrays.stream(produse).filter(p -> p.getCod().equals(scannedBarcode)).findFirst().orElse(null);
+                try {
 
-                if (matchedProduct != null) {
-                    // Add the matched product to the cart
-                    // addToCart(matchedProduct) should be a method you define to handle adding the product to the cart
+                    List<Produs> produse = objectMapper.readValue(jsonData, new TypeReference<List<Produs>>() {});
+                    // Print the list of Produs objects
+                    Produs matchedProduct = produse.stream()
+                            .filter(p -> p.getCod().equals(scannedBarcode))
+                            .findFirst()
+                            .orElse(null);
+                    if (matchedProduct != null) {
+                        // Add the matched product to the cart
+                        // addToCart(matchedProduct) should be a method you define to handle adding the product to the cart
 
+
+                        runOnUiThread(() -> {
+                            new AlertDialog.Builder(ScanBarcodeActivity.this)
+                                    .setTitle("New product")
+                                    .setMessage("Do you want to add the following product to cart?\n " + matchedProduct.getDenumire())
+                                    .setPositiveButton("Yes", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        cart.addToCart(matchedProduct);
+                                        isScanning = true;
+                                    })
+                                    .setNegativeButton("No", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        isScanning = true;
+                                    })
+                                    .setCancelable(false)
+                                    .show();
+                        });
+                    } else {
+                        // No matching product found
+                        runOnUiThread(() -> {
+                            Toast.makeText(ScanBarcodeActivity.this, "No product found for this barcode", Toast.LENGTH_SHORT).show();
+                        });
+
+                    }
+                    isScanning = true;
+
+                } catch (Exception e) {
+                    e.printStackTrace();
                     runOnUiThread(() -> {
-                        cart.addToCart(matchedProduct);
-                        Toast.makeText(ScanBarcodeActivity.this, "Product added to cart: " + matchedProduct.getDenumire(), Toast.LENGTH_SHORT).show();
-                    });
-                } else {
-                    // No matching product found
-                    runOnUiThread(() -> {
-                        Toast.makeText(ScanBarcodeActivity.this, "No product found for this barcode", Toast.LENGTH_SHORT).show();
+                        new AlertDialog.Builder(ScanBarcodeActivity.this)
+                                .setTitle("Connection Error")
+                                .setMessage(e.getMessage())
+                                .setPositiveButton("OK", (dialog, which) -> {
+                                    dialog.dismiss();
+                                    //isScanning = true;
+                                })
+                                .setCancelable(false)
+                                .show();
                     });
                 }
+
+
+                 //Find product by scannedBarcode
+
             }
         });
     }

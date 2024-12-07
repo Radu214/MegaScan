@@ -1,47 +1,55 @@
 package com.example.megascan.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class Produs {
-    String cod;
-    double pret;
-    String denumire;
-    String firma;
+    @JsonProperty("COD")
+    String COD;
+    @JsonProperty("PRET")
+    double PRET;
+    @JsonProperty("DENUMIRE")
+    String DENUMIRE;
+    @JsonProperty("FIRMA")
+    String FIRMA;
+
+    public Produs(){}
 
     public Produs(String cod, double pret, String denumire, String firma) {
-        this.cod = cod;
-        this.pret = pret;
-        this.denumire = denumire;
-        this.firma = firma;
+        this.COD = cod;
+        this.PRET = pret;
+        this.DENUMIRE = denumire;
+        this.FIRMA = firma;
     }
 
     public String getCod() {
-        return cod;
+        return COD;
     }
 
     public void setCod(String cod) {
-        this.cod = cod;
+        this.COD = cod;
     }
 
     public double getPret() {
-        return pret;
+        return PRET;
     }
 
-    public void setPret(double pret) {
-        this.pret = pret;
+    public void setPret(double PRET) {
+        this.PRET = PRET;
     }
 
     public String getDenumire() {
-        return denumire;
+        return DENUMIRE;
     }
 
-    public void setDenumire(String denumire) {
-        this.denumire = denumire;
+    public void setDenumire(String DENUMIRE) {
+        this.DENUMIRE = DENUMIRE;
     }
 
     public String getFirma() {
-        return firma;
+        return FIRMA;
     }
 
-    public void setFirma(String firma) {
-        this.firma = firma;
+    public void setFirma(String FIRMA) {
+        this.FIRMA = FIRMA;
     }
 }
