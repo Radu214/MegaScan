@@ -254,23 +254,31 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                                     .setPositiveButton("Yes", (dialog, which) -> {
                                         dialog.dismiss();
                                         cart.addToCart(matchedProduct);
-                                        isScanning = true;
+                                        // Delay re-enabling scanning
+                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                            isScanning = true;
+                                        }, 2000);
                                     })
                                     .setNegativeButton("No", (dialog, which) -> {
                                         dialog.dismiss();
-                                        isScanning = true;
+                                        // Delay re-enabling scanning
+                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                            isScanning = true;
+                                        }, 2000);
                                     })
+
                                     .setCancelable(false)
                                     .show();
                         });
                     } else {
                         // No matching product found
                         runOnUiThread(() -> {
+                            isScanning = true;
                             Toast.makeText(ScanBarcodeActivity.this, "No product found for this barcode", Toast.LENGTH_SHORT).show();
                         });
 
                     }
-                    isScanning = true;
+
 
                 } catch (Exception e) {
                     e.printStackTrace();
