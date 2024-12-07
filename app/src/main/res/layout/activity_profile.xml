@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:padding="24dp">
+
+    <ImageView
+        android:id="@+id/image_profile_picture"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/baseline_account_circle_24"
+        android:contentDescription="@string/profile_picture_desc"
+        android:scaleType="centerCrop"
+        android:layout_marginBottom="24dp"/>
+
+    <TextView
+        android:id="@+id/text_email"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="exampleuser@example.com"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

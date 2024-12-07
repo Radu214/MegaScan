@@ -65,7 +65,11 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         iconCart.setOnClickListener(v -> {
             Intent intent = new Intent(ScanBarcodeActivity.this, CartActivity.class);
             startActivity(intent);});
-        iconProfile.setOnClickListener(v -> Toast.makeText(this, "Profile Page", Toast.LENGTH_SHORT).show());
+
+        iconProfile.setOnClickListener(v -> {
+            Intent intent = new Intent(ScanBarcodeActivity.this, ProfileActivity.class);
+            startActivity(intent);});
+
         iconScan.setOnClickListener(v -> Toast.makeText(this, "Already on Scan Page", Toast.LENGTH_SHORT).show());
         iconPromo.setOnClickListener(v -> Toast.makeText(this, "Promo Page", Toast.LENGTH_SHORT).show());
         iconAI.setOnClickListener(v -> Toast.makeText(this, "AI Assistant Page", Toast.LENGTH_SHORT).show());

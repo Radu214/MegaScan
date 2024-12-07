@@ -23,4 +23,9 @@
     <string name="cart_desc">Cart</string>
     <string name="promo_desc">Promo</string>
     <string name="assistant_desc">Assistant</string>
+
+    <string name="profile_picture_desc">Default profile picture</string>
+
+
+
 </resources>
