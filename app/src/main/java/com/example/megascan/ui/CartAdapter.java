@@ -60,9 +60,19 @@ public class CartAdapter extends RecyclerView.Adapter<CartAdapter.CartViewHolder
 
         holder.buttonRemove.setOnClickListener(v -> {
             cart.getItemList().remove(position);
-            notifyItemRemoved(position);
+
+            if (cart.getItemList().isEmpty()) {
+                // If the cart becomes empty, notifyDataSetChanged() to prevent crashes
+                notifyDataSetChanged();
+            } else {
+                // Notify the adapter about the item removed
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, cart.getItemList().size());
+            }
+
             if (listener != null) listener.onItemRemoved(item);
         });
+
     }
 
     @Override

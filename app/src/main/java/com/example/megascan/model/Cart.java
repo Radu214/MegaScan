@@ -31,8 +31,19 @@ public class Cart {
     public void setTotal(Integer total) {
         this.total = total;
     }
-    public void addToCart(Produs produs){
-        CartItem item = new CartItem(produs.getDenumire(), produs.getPret(), produs.getCod(), produs.getFirma(), 1);
-        itemList.add(item);
+    public void addToCart(Produs produs) {
+        // Check if the item already exists in the cart
+        for (CartItem item : itemList) {
+            if (item.getCod().equals(produs.getCod())) {
+                // If found, increase the quantity by 1
+                item.setQuantity(item.getQuantity() + 1);
+                return; // Exit the method as we don't need to add a new item
+            }
+        }
+
+        // If the item doesn't exist, add it to the cart
+        CartItem newItem = new CartItem(produs.getDenumire(), produs.getPret(), produs.getCod(), produs.getFirma(), 1);
+        itemList.add(newItem);
     }
+
 }
