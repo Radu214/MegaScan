@@ -1,3 +1,18 @@
 <resources>
-    <string name="app_name">MegaScan</string>
+    <string name="app_name">YourApp</string>
+
+    <!-- Existing strings... -->
+    <string name="login_title">Log In</string>
+    <string name="hint_email">Email</string>
+    <string name="hint_password">Password</string>
+    <string name="action_login">Log In</string>
+    <string name="error_fields_required">Please fill in both fields.</string>
+    <string name="error_invalid_credentials">Invalid email or password.</string>
+
+    <!-- New strings for welcome & sign up -->
+    <string name="welcome_title">Welcome</string>
+    <string name="action_sign_up">Sign Up</string>
+    <string name="action_go_to_login">Go to Log In</string>
+    <string name="sign_up_title">Sign Up</string>
+    <string name="action_register">Register</string>
 </resources>
