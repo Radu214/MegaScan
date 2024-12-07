@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <!-- barcode_overlay.xml in drawable folder -->
-    <shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle">
-        <solid android:color="#80000000" /> <!-- Semi-transparent background -->
-        <padding android:left="0dp" android:top="0dp" android:right="0dp" android:bottom="0dp" />
-        <!-- You can add a transparent rectangle in the middle by using a layered drawable or by creating a custom view -->
-    </shape>
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
 
-</selector>
+    <solid android:color="#80000000" /> <!-- Semi-transparent background -->
+    <padding
+        android:left="0dp"
+        android:top="0dp"
+        android:right="0dp"
+        android:bottom="0dp" />
+
+    <!-- If you want a transparent "hole" in the center, you'll need a more complex approach
+         such as a layered drawable or a custom view to draw a transparent rectangle. -->
+
+</shape>
