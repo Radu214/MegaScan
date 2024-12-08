@@ -11,14 +11,26 @@ public class Produs {
     String DENUMIRE;
     @JsonProperty("FIRMA")
     String FIRMA;
+    @JsonProperty("PLUS18")
+    int PLUS18;
+
 
     public Produs(){}
 
-    public Produs(String cod, double pret, String denumire, String firma) {
+    public Produs(String cod, double pret, String denumire, String firma, int PLUS18) {
         this.COD = cod;
         this.PRET = pret;
         this.DENUMIRE = denumire;
         this.FIRMA = firma;
+        this.PLUS18 = PLUS18;
+    }
+
+    public int getPLUS18() {
+        return PLUS18;
+    }
+
+    public void setPLUS18(int PLUS18) {
+        this.PLUS18 = PLUS18;
     }
 
     public String getCod() {

@@ -1,11 +1,14 @@
 package com.example.megascan.ui;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -57,8 +60,29 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         updateTotal();
 
         buttonCheckout.setOnClickListener(v -> {
-            Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
-            startActivity(intent);
+            if(cart.getPlus18()>0 && !cart.isEmployeeChecked())
+            {
+                runOnUiThread(() -> {
+                    new AlertDialog.Builder(CartActivity.this)
+                            .setTitle("Additional confiramtion needed")
+                            .setMessage("You have added an age restricted item.\nPlease find an employee to confirm you are 18 or older.")
+                            .setPositiveButton("Go to Scan", (dialog, which) -> {
+                                dialog.dismiss();
+                                new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                }, 2000);
+                                Intent intent = new Intent(CartActivity.this, ScanBarcodeActivity.class);
+                                startActivity(intent);
+                            })
+                            .setCancelable(false)
+                            .show();
+
+                });
+
+            }
+            else {
+                Intent intent = new Intent(CartActivity.this, CheckoutActivity.class);
+                startActivity(intent);
+            }
         });
     }
 
@@ -69,15 +93,20 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
 
     @Override
     public void onItemRemoved(CartItem item) {
+
         updateTotal();
     }
 
 
     private void updateTotal() {
         double total = 0;
+        cart.setPlus18(0);
         for (CartItem item : cart.getItemList()) {
             total += item.getPret() * item.getQuantity();
+            if(item.getPLUS18()>0)
+            cart.setPlus18(cart.getPlus18()+item.getQuantity());
         }
+
 
         if (cart.getItemList().isEmpty()) {
             // Show empty state

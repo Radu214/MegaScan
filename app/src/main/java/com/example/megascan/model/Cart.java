@@ -7,10 +7,30 @@ public class Cart {
 
     private final static Cart instance = new Cart();
 
-    private Cart(){};
+    private Cart(){
+        plus18 = 0;
+        employeeChecked = false;
+    };
     List<CartItem> itemList = new ArrayList<CartItem>();
     Integer total;
+    int plus18;
+    boolean employeeChecked;
 
+    public boolean isEmployeeChecked() {
+        return employeeChecked;
+    }
+
+    public void setEmployeeChecked(boolean employeeChacked) {
+        this.employeeChecked = employeeChacked;
+    }
+
+    public int getPlus18() {
+        return plus18;
+    }
+
+    public void setPlus18(int plus18) {
+        this.plus18 = plus18;
+    }
 
     public static Cart getInstance() {
         return instance;
@@ -32,6 +52,8 @@ public class Cart {
         this.total = total;
     }
     public void addToCart(Produs produs) {
+        if(produs.getPLUS18()==1 && !employeeChecked)
+            plus18++;
         // Check if the item already exists in the cart
         for (CartItem item : itemList) {
             if (item.getCod().equals(produs.getCod())) {
@@ -42,7 +64,7 @@ public class Cart {
         }
 
         // If the item doesn't exist, add it to the cart
-        CartItem newItem = new CartItem(produs.getDenumire(), produs.getPret(), produs.getCod(), produs.getFirma(), 1);
+        CartItem newItem = new CartItem(produs.getDenumire(), produs.getPret(), produs.getCod(), produs.getFirma(), produs.getPLUS18(),  1);
         itemList.add(newItem);
     }
 

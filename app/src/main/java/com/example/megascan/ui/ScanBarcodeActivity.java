@@ -188,107 +188,53 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     }
 
     private void showBarcodeDialog(String barcodeValue) {
-        OkHttpClient client = new OkHttpClient();
 
-        // Suppose you have a scannedBarcode string from your previous scanning logic
-        final String scannedBarcode = barcodeValue; // This should come from your scanning result
+        if(barcodeValue.equals("4226422642260"))
+        {
+            Cart cart = Cart.getInstance();
+            cart.setEmployeeChecked(true);
+            runOnUiThread(() -> {
+                new AlertDialog.Builder(ScanBarcodeActivity.this)
+                        .setTitle("Employee Confirmation Successful")
+                        .setMessage("You are now eligible to purchase age restricted items.")
+                        .setPositiveButton("OK", (dialog, which) -> {
+                            dialog.dismiss();
+                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                isScanning = true;
+                            }, 2000);
+                        })
+                        .setCancelable(false)
+                        .show();
 
-        Request request = new Request.Builder()
-                .url("http://10.200.20.238:3000/data") // Replace with your server's IP and port
-                .build();
+            });
+        }
+        else {
+            OkHttpClient client = new OkHttpClient();
 
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                e.printStackTrace();
-                String errorMessage = "F " + e.getMessage();
-                runOnUiThread(() -> {
-                    Toast.makeText(ScanBarcodeActivity.this, errorMessage, Toast.LENGTH_LONG).show();
-                });
-                runOnUiThread(() -> {
-                    new AlertDialog.Builder(ScanBarcodeActivity.this)
-                            .setTitle("Connection Error")
-                            .setMessage(errorMessage)
-                            .setPositiveButton("OK", (dialog, which) -> dialog.dismiss())
-                            .setCancelable(false)
-                            .show();
-                });
-            }
+            // Suppose you have a scannedBarcode string from your previous scanning logic
+            final String scannedBarcode = barcodeValue; // This should come from your scanning result
 
+            Request request = new Request.Builder()
+                    .url("http://10.200.20.238:3000/data") // Replace with your server's IP and port
+                    .build();
 
-            @Override
-            public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
-                if (!response.isSuccessful()) {
-                    // Handle server error
-                    runOnUiThread(() -> {
-                        Toast.makeText(ScanBarcodeActivity.this, "Server error: " + response.message(), Toast.LENGTH_SHORT).show();
-                    });
-                    return;
-                }
-
-                final String jsonData = response.body().string();
-
-                //Bring the cart
-                Cart cart = Cart.getInstance();
-
-                // Parse JSON
-                ObjectMapper objectMapper = new ObjectMapper();
-
-                try {
-
-                    List<Produs> produse = objectMapper.readValue(jsonData, new TypeReference<List<Produs>>() {});
-                    // Print the list of Produs objects
-                    Produs matchedProduct = produse.stream()
-                            .filter(p -> p.getCod().equals(scannedBarcode))
-                            .findFirst()
-                            .orElse(null);
-                    if (matchedProduct != null) {
-                        // Add the matched product to the cart
-                        // addToCart(matchedProduct) should be a method you define to handle adding the product to the cart
-
-
-                        runOnUiThread(() -> {
-                            new AlertDialog.Builder(ScanBarcodeActivity.this)
-                                    .setTitle("New product")
-                                    .setMessage("Do you want to add the following product to cart?\n " + matchedProduct.getDenumire())
-                                    .setPositiveButton("Yes", (dialog, which) -> {
-                                        dialog.dismiss();
-                                        cart.addToCart(matchedProduct);
-                                        // Delay re-enabling scanning
-                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                            isScanning = true;
-                                        }, 2000);
-                                    })
-                                    .setNegativeButton("No", (dialog, which) -> {
-                                        dialog.dismiss();
-                                        // Delay re-enabling scanning
-                                        new Handler(Looper.getMainLooper()).postDelayed(() -> {
-                                            isScanning = true;
-                                        }, 2000);
-                                    })
-
-                                    .setCancelable(false)
-                                    .show();
-                        });
-                    } else {
-                        // No matching product found
-                        runOnUiThread(() -> {
-                            isScanning = true;
-                            Toast.makeText(ScanBarcodeActivity.this, "No product found for this barcode", Toast.LENGTH_SHORT).show();
-                        });
-
-                    }
-
-
-                } catch (Exception e) {
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(@NotNull Call call, @NotNull IOException e) {
                     e.printStackTrace();
+                    String errorMessage = "F " + e.getMessage();
+                    runOnUiThread(() -> {
+                        Toast.makeText(ScanBarcodeActivity.this, errorMessage, Toast.LENGTH_LONG).show();
+                    });
                     runOnUiThread(() -> {
                         new AlertDialog.Builder(ScanBarcodeActivity.this)
                                 .setTitle("Connection Error")
-                                .setMessage(e.getMessage())
+                                .setMessage(errorMessage)
                                 .setPositiveButton("OK", (dialog, which) -> {
                                     dialog.dismiss();
-                                    //isScanning = true;
+                                    new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                        isScanning = true;
+                                    }, 2000);
                                 })
                                 .setCancelable(false)
                                 .show();
@@ -296,10 +242,91 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                 }
 
 
-                 //Find product by scannedBarcode
+                @Override
+                public void onResponse(@NotNull Call call, @NotNull Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        // Handle server error
+                        runOnUiThread(() -> {
+                            Toast.makeText(ScanBarcodeActivity.this, "Server error: " + response.message(), Toast.LENGTH_SHORT).show();
+                        });
+                        return;
+                    }
 
-            }
-        });
+                    final String jsonData = response.body().string();
+
+                    //Bring the cart
+                    Cart cart = Cart.getInstance();
+
+                    // Parse JSON
+                    ObjectMapper objectMapper = new ObjectMapper();
+
+                    try {
+
+                        List<Produs> produse = objectMapper.readValue(jsonData, new TypeReference<List<Produs>>() {
+                        });
+                        // Print the list of Produs objects
+                        Produs matchedProduct = produse.stream()
+                                .filter(p -> p.getCod().equals(scannedBarcode))
+                                .findFirst()
+                                .orElse(null);
+                        if (matchedProduct != null) {
+                            // Add the matched product to the cart
+                            // addToCart(matchedProduct) should be a method you define to handle adding the product to the cart
+
+                            runOnUiThread(() -> {
+                                new AlertDialog.Builder(ScanBarcodeActivity.this)
+                                        .setTitle("New product")
+                                        .setMessage("Do you want to add the following product to cart?\n " + matchedProduct.getDenumire())
+                                        .setPositiveButton("Yes", (dialog, which) -> {
+                                            dialog.dismiss();
+                                            cart.addToCart(matchedProduct);
+                                            // Delay re-enabling scanning
+                                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                                isScanning = true;
+                                            }, 2000);
+                                        })
+                                        .setNegativeButton("No", (dialog, which) -> {
+                                            dialog.dismiss();
+                                            // Delay re-enabling scanning
+                                            new Handler(Looper.getMainLooper()).postDelayed(() -> {
+                                                isScanning = true;
+                                            }, 2000);
+                                        })
+
+                                        .setCancelable(false)
+                                        .show();
+                            });
+                        } else {
+                            // No matching product found
+                            runOnUiThread(() -> {
+                                isScanning = true;
+                                Toast.makeText(ScanBarcodeActivity.this, "No product found for this barcode", Toast.LENGTH_SHORT).show();
+                            });
+
+                        }
+
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        runOnUiThread(() -> {
+                            new AlertDialog.Builder(ScanBarcodeActivity.this)
+                                    .setTitle("Connection Error")
+                                    .setMessage(e.getMessage())
+                                    .setPositiveButton("OK", (dialog, which) -> {
+                                        dialog.dismiss();
+                                        //isScanning = true;
+                                    })
+                                    .setCancelable(false)
+                                    .show();
+                        });
+                    }
+
+
+                    //Find product by scannedBarcode
+
+                }
+            });
+        }
     }
 
 
