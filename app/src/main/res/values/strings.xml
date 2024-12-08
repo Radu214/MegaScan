@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YourApp</string>
+    <string name="app_name">MegaScan</string>
 
     <!-- Existing strings... -->
     <string name="login_title">Log In</string>

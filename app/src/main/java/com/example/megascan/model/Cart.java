@@ -7,10 +7,11 @@ public class Cart {
 
     private final static Cart instance = new Cart();
 
-    private Cart(){
+    private Cart() {
         plus18 = 0;
         employeeChecked = false;
-    };
+    }
+
     List<CartItem> itemList = new ArrayList<CartItem>();
     Integer total;
     int plus18;
@@ -20,8 +21,8 @@ public class Cart {
         return employeeChecked;
     }
 
-    public void setEmployeeChecked(boolean employeeChacked) {
-        this.employeeChecked = employeeChacked;
+    public void setEmployeeChecked(boolean employeeChecked) {
+        this.employeeChecked = employeeChecked;
     }
 
     public int getPlus18() {
@@ -40,7 +41,7 @@ public class Cart {
         return itemList;
     }
 
-    public void setItemList(List<CartItem> produsList) {
+    public void setItemList(List<CartItem> itemList) {
         this.itemList = itemList;
     }
 
@@ -51,9 +52,11 @@ public class Cart {
     public void setTotal(Integer total) {
         this.total = total;
     }
+
     public void addToCart(Produs produs) {
-        if(produs.getPLUS18()==1 && !employeeChecked)
+        if (produs.getPLUS18() == 1 && !employeeChecked) {
             plus18++;
+        }
         // Check if the item already exists in the cart
         for (CartItem item : itemList) {
             if (item.getCod().equals(produs.getCod())) {
@@ -64,8 +67,19 @@ public class Cart {
         }
 
         // If the item doesn't exist, add it to the cart
-        CartItem newItem = new CartItem(produs.getDenumire(), produs.getPret(), produs.getCod(), produs.getFirma(), produs.getPLUS18(),  1);
+        CartItem newItem = new CartItem(produs.getDenumire(), produs.getPret(), produs.getCod(), produs.getFirma(), produs.getPLUS18(), 1);
         itemList.add(newItem);
     }
 
+    public void clearCart() {
+        // Clear the cart list
+        itemList.clear();
+
+        // Reset total amount and age-restricted item count
+        total = 0;
+        plus18 = 0;
+
+        // Reset employee confirmation flag
+        employeeChecked = false;
+    }
 }

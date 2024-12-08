@@ -8,12 +8,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.example.megascan.R;
+import com.example.megascan.model.Order;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -26,6 +33,8 @@ public class ProfileActivity extends AppCompatActivity {
     private ImageView imageProfilePicture;
     private TextView textEmail;
     private TextView textFullName;
+    private RecyclerView recyclerViewOrders;
+    private OrdersAdapter ordersAdapter;
 
     private OkHttpClient client;
     private static final String BASE_URL = "http://10.200.20.238:3000"; // Replace with your server IP
@@ -38,6 +47,7 @@ public class ProfileActivity extends AppCompatActivity {
         imageProfilePicture = findViewById(R.id.image_profile_picture);
         textEmail = findViewById(R.id.text_email);
         textFullName = findViewById(R.id.text_full_name);
+        recyclerViewOrders = findViewById(R.id.recycler_view_orders);
 
         client = new OkHttpClient();
 
@@ -52,7 +62,6 @@ public class ProfileActivity extends AppCompatActivity {
             // Optionally redirect the user to the login screen
         }
     }
-
 
     private void fetchUserProfile(String email) {
         String url = BASE_URL + "/user/" + email;
@@ -89,11 +98,58 @@ public class ProfileActivity extends AppCompatActivity {
 
                         textFullName.setText(fullName);
                         textEmail.setText(email);
-                        // Optionally set a placeholder image
                         imageProfilePicture.setImageResource(R.drawable.baseline_account_circle_24);
+
+                        // After fetching user info, fetch order history
+                        fetchOrderHistory(email);
                     } catch (JSONException e) {
                         e.printStackTrace();
                         Toast.makeText(ProfileActivity.this, "Error parsing user data", Toast.LENGTH_SHORT).show();
+                    }
+                });
+            }
+        });
+    }
+
+    private void fetchOrderHistory(String email) {
+        String url = BASE_URL + "/orders/" + email;
+
+        Request request = new Request.Builder()
+                .url(url)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+                runOnUiThread(() ->
+                        Toast.makeText(ProfileActivity.this, "Failed to load orders: " + e.getMessage(), Toast.LENGTH_SHORT).show()
+                );
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    runOnUiThread(() ->
+                            Toast.makeText(ProfileActivity.this, "Server error: " + response.message(), Toast.LENGTH_SHORT).show()
+                    );
+                    return;
+                }
+
+                final String responseData = response.body().string();
+                runOnUiThread(() -> {
+                    try {
+                        ObjectMapper objectMapper = new ObjectMapper();
+                        List<Order> orders = objectMapper.readValue(responseData, new TypeReference<List<Order>>() {});
+
+                        // Setup the RecyclerView
+                        recyclerViewOrders.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
+                        ordersAdapter = new OrdersAdapter(orders);
+                        recyclerViewOrders.setAdapter(ordersAdapter);
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        Toast.makeText(ProfileActivity.this, "Error parsing order data", Toast.LENGTH_SHORT).show();
                     }
                 });
             }
