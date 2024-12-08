@@ -49,7 +49,7 @@ public class PromoActivity extends AppCompatActivity {
             fetchRecommendations(userEmail);
         } else {
             Toast.makeText(this, "No user logged in. Please log in first.", Toast.LENGTH_SHORT).show();
-            // You could optionally redirect to a login screen here
+            // Optionally navigate back to login activity
         }
     }
 
@@ -84,21 +84,24 @@ public class PromoActivity extends AppCompatActivity {
                     JSONArray recommendationsArray = json.getJSONArray("recommendations");
                     List<PromoItem> promoItems = new ArrayList<>();
 
+                    // Parse each recommendation object
                     for (int i = 0; i < recommendationsArray.length(); i++) {
-                        JSONArray rec = recommendationsArray.getJSONArray(i);
-                        String productId = rec.getString(0);
-                        double predictedRating = rec.getDouble(1);
+                        JSONObject rec = recommendationsArray.getJSONObject(i);
+                        String productId = rec.getString("productId");
+                        double rating = rec.getDouble("rating");
+                        String name = rec.getString("name");
+                        double price = rec.getDouble("price");
 
-                        // In a real scenario, you would fetch product details from your DB or modify
-                        // the endpoint to return these details directly. For now, we use placeholders.
+                        // Create a PromoItem using the data from the server
+                        // Adjust fields as necessary depending on your PromoItem constructor
                         PromoItem item = new PromoItem(
-                                productId,          // cod
-                                predictedRating,     // weight (placeholder)
-                                productId,           // denumire (placeholder as product name)
-                                "Recommended",       // firma (placeholder)
-                                0,                   // plus18 (placeholder)
-                                "",                  // imageUrl (placeholder)
-                                predictedRating      // price (placeholder)
+                                productId, // cod
+                                rating,    // weight (using rating here)
+                                name,      // denumire from server
+                                "Recommended", // firma placeholder
+                                0,         // plus18 placeholder
+                                "",        // imageUrl placeholder or fetch from server if available
+                                price      // price from server
                         );
                         promoItems.add(item);
                     }
