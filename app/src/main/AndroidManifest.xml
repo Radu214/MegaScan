@@ -26,7 +26,12 @@
         <activity android:name=".ui.LoginActivity"
             android:exported="true"/>
         <activity android:name=".ui.WelcomeActivity"
-            android:exported="true" />
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".ui.ProfileActivity"
             android:exported="true" />
         <activity android:name=".ui.AssistantActivity"
@@ -37,17 +42,7 @@
 
 
         <activity android:name=".ui.ScanBarcodeActivity"
-            android:exported="true" >
-
-
-
-
-
-        <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-        </intent-filter>
-        </activity>
+            android:exported="true" />
         <activity android:name=".ui.CartActivity" android:exported="true" />
         <activity android:name=".ui.CheckoutActivity" android:exported="true" />
 
