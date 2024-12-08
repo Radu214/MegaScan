@@ -30,7 +30,6 @@ public class PromoActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private PromoAdapter adapter;
     private OkHttpClient client;
-    // Adjust BASE_URL to your server's actual IP/hostname and port.
     private static final String BASE_URL = "http://10.200.20.238:3000";
 
     @Override
@@ -49,7 +48,6 @@ public class PromoActivity extends AppCompatActivity {
             fetchRecommendations(userEmail);
         } else {
             Toast.makeText(this, "No user logged in. Please log in first.", Toast.LENGTH_SHORT).show();
-            // Optionally navigate back to login activity
         }
     }
 
@@ -84,24 +82,24 @@ public class PromoActivity extends AppCompatActivity {
                     JSONArray recommendationsArray = json.getJSONArray("recommendations");
                     List<PromoItem> promoItems = new ArrayList<>();
 
-                    // Parse each recommendation object
                     for (int i = 0; i < recommendationsArray.length(); i++) {
                         JSONObject rec = recommendationsArray.getJSONObject(i);
                         String productId = rec.getString("productId");
                         double rating = rec.getDouble("rating");
                         String name = rec.getString("name");
                         double price = rec.getDouble("price");
+                        double discount = rec.getDouble("discount");
 
                         // Create a PromoItem using the data from the server
-                        // Adjust fields as necessary depending on your PromoItem constructor
                         PromoItem item = new PromoItem(
-                                productId, // cod
-                                rating,    // weight (using rating here)
+                                productId,
+                                price,// cod
                                 name,      // denumire from server
                                 "Recommended", // firma placeholder
-                                0,         // plus18 placeholder
-                                "",        // imageUrl placeholder or fetch from server if available
-                                price      // price from server
+                                0,         // plus18 placeholder if needed
+                                "",        // imageUrl placeholder
+
+                                price-price*discount/100  // new discount field
                         );
                         promoItems.add(item);
                     }

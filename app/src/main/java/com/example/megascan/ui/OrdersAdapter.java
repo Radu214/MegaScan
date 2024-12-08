@@ -45,11 +45,11 @@ public class OrdersAdapter extends RecyclerView.Adapter<OrdersAdapter.OrderViewH
                     .append(item.getQuantity())
                     .append(" = ")
                     .append(item.getPrice() * item.getQuantity())
-                    .append("lei\n");
+                    .append(" lei\n");
         }
 
         holder.textItems.setText(itemsBuilder.toString().trim());
-        holder.textTotal.setText(String.format("Total: $%.2f", total));
+        holder.textTotal.setText(String.format("Total: %.2f lei", total));
     }
 
     @Override

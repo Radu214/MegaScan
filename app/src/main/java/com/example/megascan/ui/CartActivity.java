@@ -213,7 +213,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
             textEmptyCartMessage.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
             checkoutContainer.setVisibility(View.VISIBLE);
-            textTotalAmount.setText(String.format("$%.2f", total));
+            textTotalAmount.setText(String.format("%.2f lei", total));
         }
     }
 }
