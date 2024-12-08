@@ -2,6 +2,7 @@ package com.example.megascan.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.widget.Button;
@@ -89,6 +90,11 @@ public class LoginActivity extends AppCompatActivity {
                         runOnUiThread(() -> {
                             Toast.makeText(LoginActivity.this, "Welcome " + firstName + " " + lastName + "!", Toast.LENGTH_LONG).show();
                             // Proceed to your next activity after login
+                            SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
+                            SharedPreferences.Editor editor = sharedPreferences.edit();
+                            editor.putString("USER_EMAIL", email); // Save the user's email
+                            editor.apply();
+
                             Intent intent = new Intent(LoginActivity.this, ScanBarcodeActivity.class);
                             startActivity(intent);
                             finish();
