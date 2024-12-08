@@ -26,9 +26,9 @@ public class PromoActivity extends AppCompatActivity {
 
         // Example data
         List<PromoItem> promoItems = new ArrayList<>();
-        promoItems.add(new PromoItem("codabc", 12.5, "Product A", "Brand A", "https://www.shutterstock.com/image-photo/closeup-person-eating-spaghetti-fork-260nw-2481135071.jpg", 9.99));
-        promoItems.add(new PromoItem("codabc", 12.5, "Product B", "Brand B", "https://www.shutterstock.com/image-photo/closeup-person-eating-spaghetti-fork-260nw-2481135071.jpg", 9.99));
-        promoItems.add(new PromoItem("codabc", 12.5, "Product C", "Brand C", "https://www.shutterstock.com/image-photo/closeup-person-eating-spaghetti-fork-260nw-2481135071.jpg", 9.99));
+        promoItems.add(new PromoItem("codabc", 12.5, "Product A", "Brand A", 0, "https://www.shutterstock.com/image-photo/closeup-person-eating-spaghetti-fork-260nw-2481135071.jpg", 9.99));
+        promoItems.add(new PromoItem("codabc", 12.5, "Product B", "Brand B", 0,"https://www.shutterstock.com/image-photo/closeup-person-eating-spaghetti-fork-260nw-2481135071.jpg", 9.99));
+        promoItems.add(new PromoItem("codabc", 12.5, "Product C", "Brand C", 0, "https://www.shutterstock.com/image-photo/closeup-person-eating-spaghetti-fork-260nw-2481135071.jpg", 9.99));
 
         setPromotionalItems(promoItems);
     }
