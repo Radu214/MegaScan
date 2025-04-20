@@ -93,11 +93,11 @@ public class PromoActivity extends AppCompatActivity {
                         // Create a PromoItem using the data from the server
                         PromoItem item = new PromoItem(
                                 productId,
-                                price,// cod
-                                name,      // denumire from server
-                                "Recommended", // firma placeholder
-                                0,         // plus18 placeholder if needed
-                                "",        // imageUrl placeholder
+                                price,
+                                name,
+                                "Recommended",
+                                0,
+                                "",
 
                                 price-price*discount/100  // new discount field
                         );

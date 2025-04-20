@@ -22,13 +22,11 @@ public class WelcomeActivity extends AppCompatActivity {
         buttonGoToLogin = findViewById(R.id.button_go_to_login);
 
         // Set click listeners
-        // Sign Up button navigates to SignUpActivity
         buttonSignUp.setOnClickListener(v -> {
             Intent intent = new Intent(WelcomeActivity.this, SignUpActivity.class);
             startActivity(intent);
         });
 
-        // Go to Login button navigates to LoginActivity
         buttonGoToLogin.setOnClickListener(v -> {
             Intent intent = new Intent(WelcomeActivity.this, LoginActivity.class);
             startActivity(intent);

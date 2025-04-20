@@ -89,10 +89,10 @@ public class LoginActivity extends AppCompatActivity {
 
                         runOnUiThread(() -> {
                             Toast.makeText(LoginActivity.this, "Welcome " + firstName + " " + lastName + "!", Toast.LENGTH_LONG).show();
-                            // Proceed to your next activity after login
+
                             SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                            editor.putString("USER_EMAIL", email); // Save the user's email
+                            editor.putString("USER_EMAIL", email);
                             editor.apply();
 
                             Intent intent = new Intent(LoginActivity.this, ScanBarcodeActivity.class);

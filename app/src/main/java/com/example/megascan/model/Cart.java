@@ -62,7 +62,7 @@ public class Cart {
             if (item.getCod().equals(produs.getCod())) {
                 // If found, increase the quantity by 1
                 item.setQuantity(item.getQuantity() + 1);
-                return; // Exit the method as we don't need to add a new item
+                return;
             }
         }
 
@@ -72,14 +72,14 @@ public class Cart {
     }
 
     public void clearCart() {
-        // Clear the cart list
+
         itemList.clear();
 
-        // Reset total amount and age-restricted item count
+
         total = 0;
         plus18 = 0;
 
-        // Reset employee confirmation flag
+
         employeeChecked = false;
     }
 }

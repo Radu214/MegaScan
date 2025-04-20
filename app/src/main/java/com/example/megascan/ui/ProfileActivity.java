@@ -37,7 +37,7 @@ public class ProfileActivity extends AppCompatActivity {
     private OrdersAdapter ordersAdapter;
 
     private OkHttpClient client;
-    private static final String BASE_URL = "http://10.200.20.238:3000"; // Replace with your server IP
+    private static final String BASE_URL = "http://10.200.20.238:3000"; //Hardcoded
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +59,7 @@ public class ProfileActivity extends AppCompatActivity {
             fetchUserProfile(userEmail);
         } else {
             Toast.makeText(this, "User email not found! Please log in again.", Toast.LENGTH_SHORT).show();
-            // Optionally redirect the user to the login screen
+
         }
     }
 
@@ -142,7 +142,7 @@ public class ProfileActivity extends AppCompatActivity {
                         ObjectMapper objectMapper = new ObjectMapper();
                         List<Order> orders = objectMapper.readValue(responseData, new TypeReference<List<Order>>() {});
 
-                        // Setup the RecyclerView
+
                         recyclerViewOrders.setLayoutManager(new LinearLayoutManager(ProfileActivity.this));
                         ordersAdapter = new OrdersAdapter(orders);
                         recyclerViewOrders.setAdapter(ordersAdapter);

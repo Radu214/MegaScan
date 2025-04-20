@@ -40,7 +40,7 @@ public class PromoAdapter extends RecyclerView.Adapter<PromoAdapter.PromoViewHol
         holder.discountedPrice.setText(String.format("%.2f lei", item.getDiscountedPrice()));
         holder.originalPrice.setPaintFlags(holder.originalPrice.getPaintFlags() | android.graphics.Paint.STRIKE_THRU_TEXT_FLAG);
 
-        // Load image using Glide or any image loading library
+        // Load image using Glide
         Glide.with(context)
                 .load(item.getImageUrl())
                 .into(holder.image);

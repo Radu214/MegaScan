@@ -43,7 +43,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import org.jetbrains.annotations.NotNull; // If using JetBrains annotations
+import org.jetbrains.annotations.NotNull;
 import java.io.IOException;
 import com.google.gson.Gson;
 import okhttp3.Call;
@@ -63,7 +63,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
     private ImageView iconProfile, iconCart, iconScan, iconPromo, iconAI;
     private ExecutorService cameraExecutor;
     private BarcodeScanner barcodeScanner;
-    private boolean isScanning = true; // Control flag to prevent multiple popups for the same code
+    private boolean isScanning = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -220,11 +220,10 @@ public class ScanBarcodeActivity extends AppCompatActivity {
         else {
             OkHttpClient client = new OkHttpClient();
 
-            // Suppose you have a scannedBarcode string from your previous scanning logic
-            final String scannedBarcode = barcodeValue; // This should come from your scanning result
+            final String scannedBarcode = barcodeValue;
 
             Request request = new Request.Builder()
-                    .url("http://10.200.20.238:3000/data") // Replace with your server's IP and port
+                    .url("http://10.200.20.238:3000/data") //Hardcoded
                     .build();
 
             client.newCall(request).enqueue(new Callback() {
@@ -263,7 +262,6 @@ public class ScanBarcodeActivity extends AppCompatActivity {
 
                     final String jsonData = response.body().string();
 
-                    //Bring the cart
                     Cart cart = Cart.getInstance();
 
                     // Parse JSON
@@ -273,14 +271,11 @@ public class ScanBarcodeActivity extends AppCompatActivity {
 
                         List<Produs> produse = objectMapper.readValue(jsonData, new TypeReference<List<Produs>>() {
                         });
-                        // Print the list of Produs objects
                         Produs matchedProduct = produse.stream()
                                 .filter(p -> p.getCod().equals(scannedBarcode))
                                 .findFirst()
                                 .orElse(null);
                         if (matchedProduct != null) {
-                            // Add the matched product to the cart
-                            // addToCart(matchedProduct) should be a method you define to handle adding the product to the cart
 
                             runOnUiThread(() -> {
                                 new AlertDialog.Builder(ScanBarcodeActivity.this)
@@ -331,7 +326,7 @@ public class ScanBarcodeActivity extends AppCompatActivity {
                     }
 
 
-                    //Find product by scannedBarcode
+
 
                 }
             });

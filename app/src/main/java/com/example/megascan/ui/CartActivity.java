@@ -29,7 +29,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
-import org.jetbrains.annotations.NotNull; // If using JetBrains annotations
+import org.jetbrains.annotations.NotNull;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -67,11 +67,9 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
         buttonCheckout = findViewById(R.id.button_checkout);
         checkoutContainer = findViewById(R.id.checkout_container);
 
-        // Example: Populate cart items
+
         Cart cart = Cart.getInstance();
-//        cartItems.add(new CartItem("Product A", 9.99, 1));
-//        cartItems.add(new CartItem("Product B", 4.50, 2));
-//        cartItems.add(new CartItem("Product C", 12.00, 1));
+
 
         adapter = new CartAdapter(cart.getItemList(), this);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -134,7 +132,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
             JSONArray itemsArray = new JSONArray();
             for (CartItem item : cartItems) {
                 JSONObject itemObj = new JSONObject();
-                itemObj.put("cod", item.getCod());   // Make sure CartItem has getCod() method
+                itemObj.put("cod", item.getCod());
                 itemObj.put("quantity", item.getQuantity());
                 itemObj.put("pret", item.getPret());
                 itemsArray.put(itemObj);
@@ -147,7 +145,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
 
         RequestBody body = RequestBody.create(jsonObject.toString(), MediaType.parse("application/json; charset=utf-8"));
         Request request = new Request.Builder()
-                .url("http://10.200.20.238:3000/checkout") // Adjust your server URL
+                .url("http://10.200.20.238:3000/checkout")
                 .post(body)
                 .build();
 
@@ -180,8 +178,7 @@ public class CartActivity extends AppCompatActivity implements CartAdapter.OnCar
 
                 final String responseData = response.body().string();
                 runOnUiThread(() -> {
-                    // Successfully saved cart data to DB
-                    // Clear cart if desired
+
                     Cart.getInstance().clearCart();
 
                     // Navigate to CheckoutActivity

@@ -325,7 +325,6 @@ app.get('/recommendations/:email', async (req, res) => {
     try {
       const recommendationsData = JSON.parse(output);
       const recommendations = recommendationsData.recommendations; 
-      // Now recommendations format: [[productId, rating, discount], ...]
 
       connection = await oracledb.getConnection(dbConfig);
       const updatedRecommendations = [];

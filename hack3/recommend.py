@@ -12,10 +12,10 @@ if len(sys.argv) < 2:
 user_id = sys.argv[1]
 
 # Database connection parameters
-dsn_tns = cx_Oracle.makedsn('localhost', 1521, service_name='xe')  # Adjust host, port, service_name as needed
+dsn_tns = cx_Oracle.makedsn('localhost', 1521, service_name='xe')
 connection = cx_Oracle.connect(user='c##radu', password='suntfrumos', dsn=dsn_tns)
 
-# Step 1: Load Data From the Database
+# Load Data From the Database
 query = """
 SELECT 
     o.user_email AS user_id, 
@@ -31,18 +31,18 @@ data = pd.read_sql(query, con=connection)
 
 connection.close()
 
-# Step 2: Calculate Ratings
+#Calculate Ratings
 data['rating'] = ((data['QUANTITY'] - data['QUANTITY'].min()) / (data['QUANTITY'].max() - data['QUANTITY'].min())) + \
                  ((data['FREQUENCY'] - data['FREQUENCY'].min()) / (data['FREQUENCY'].max() - data['FREQUENCY'].min()))
 
 # Create a User-Item Matrix
 user_item_matrix = data.pivot_table(index='USER_ID', columns='PRODUCT_ID', values='rating', fill_value=0)
 
-# Step 3: Calculate User Similarities
+#Calculate User Similarities
 user_sim_matrix = cosine_similarity(user_item_matrix)
 user_sim_df = pd.DataFrame(user_sim_matrix, index=user_item_matrix.index, columns=user_item_matrix.index)
 
-# Step 4: Predict Ratings
+#Predict Ratings
 def predict_ratings(user_id, product_id):
     user_ratings = user_item_matrix.loc[user_id]
     similar_users = user_sim_df[user_id].sort_values(ascending=False)[1:]  # Exclude self
@@ -56,7 +56,7 @@ def predict_ratings(user_id, product_id):
     
     return numerator / denominator if denominator > 0 else 0
 
-# Step 5: Recommend Products
+#Recommend Products
 def recommend_products(user_id, top_n=5):
     predicted_ratings = {
         product: predict_ratings(user_id, product) 
@@ -67,7 +67,7 @@ def recommend_products(user_id, top_n=5):
 
 recommendations = recommend_products(user_id, top_n=5)
 
-# Now we reconnect to the database to check promotions
+# Reconnect to the database to check promotions
 connection = cx_Oracle.connect(user='c##radu', password='suntfrumos', dsn=dsn_tns)
 
 # Extract just the product IDs from recommendations
@@ -90,8 +90,6 @@ else:
 connection.close()
 
 # Add discount info to recommendations
-# Current recommendations format: [(product_id, rating), ...]
-# We'll output as a list of [product_id, rating, discount]
 final_recommendations = []
 for product_id, rating in recommendations:
     discount = promo_dict.get(product_id, 0)  # 0 if not on promotions
