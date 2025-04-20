@@ -1,6 +1,6 @@
 # MegaScan
 
-**MegaScanPay** is a mobile app that enhances the in-store shopping experience at **Mega Image**. With this app, users can scan products directly with their phone camera, add them to a digital cart, and pay seamlessly—skipping the checkout lines. The app also provides personalized product recommendations based on available offers using a cosine similarity algorithm.
+**MegaScan** is a mobile app that enhances the in-store shopping experience at **Mega Image**. With this app, users can scan products directly with their phone camera, add them to a digital cart, and pay seamlessly—skipping the checkout lines. The app also provides personalized product recommendations based on available offers using a cosine similarity algorithm.
 
 > This project was built in just **24 hours** during the **HackITall** hackathon, for the AD/01 sponsor.
 
