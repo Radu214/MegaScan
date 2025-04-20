@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 
-import com.example.megascan.R; // Make sure your package name is correct
+import com.example.megascan.R;
 
 public class WelcomeActivity extends AppCompatActivity {
 
